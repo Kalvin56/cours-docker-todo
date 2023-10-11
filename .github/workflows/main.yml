@@ -12,17 +12,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Install modules
+        uses: npm install
+
+      - name: Launch test
+        uses: npm test
+
+  build:
+    name: build
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Run tests
-        run: npm test
-
+        
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
